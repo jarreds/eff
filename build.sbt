@@ -11,7 +11,6 @@ import org.scalajs.jsenv.nodejs._
 lazy val catsVersion        = "1.0.0-MF"
 lazy val monixVersion       = "3.0.0-22bf9c6"
 lazy val scalazVersion      = "7.2.7"
-lazy val fs2Version         = "0.9.6"
 lazy val specs2Version      = "4.0.0-RC4"
 lazy val twitterUtilVersion = "6.42.0"
 lazy val catbirdVersion     = "0.13.0"
@@ -22,8 +21,8 @@ lazy val eff = project.in(file("."))
   .settings(moduleName := "root")
   .settings(effSettings)
   .settings(noPublishSettings)
-  .aggregate(coreJVM, coreJS, doobie, cats, macros, monixJVM, monixJS, scalaz, twitter, fs2JS, fs2JVM)
-  .dependsOn(coreJVM, coreJS, doobie, cats, macros, monixJVM, monixJS, scalaz, twitter, fs2JS, fs2JVM)
+  .aggregate(coreJVM, coreJS, doobie, cats, macros, monixJVM, monixJS, scalaz, twitter)
+  .dependsOn(coreJVM, coreJS, doobie, cats, macros, monixJVM, monixJS, scalaz, twitter)
 
 lazy val core = crossProject.crossType(CrossType.Full).in(file("."))
   .settings(moduleName := "eff")
@@ -73,16 +72,6 @@ lazy val scalaz = project.in(file("scalaz"))
   .settings(libraryDependencies ++= scalazConcurrent)
   .settings(libraryDependencies ++= specs2Scalaz)
   .settings(effSettings ++ commonJvmSettings:_*)
-
-lazy val fs2 = crossProject.crossType(CrossType.Full).in(file("fs2"))
-  .settings(moduleName := "eff-fs2")
-  .dependsOn(core)
-  .settings(effSettings:_*)
-  .jvmSettings(commonJvmSettings ++ Seq(libraryDependencies ++= fs2Jvm):_*)
-  .jsSettings(commonJsSettings ++ Seq(libraryDependencies ++= fs2Js):_*)
-
-lazy val fs2JVM = fs2.jvm
-lazy val fs2JS =  fs2.js
 
 lazy val twitter = project
   .settings(moduleName := "eff-twitter")
@@ -328,12 +317,6 @@ lazy val scalazConcurrent = Seq(
 
 lazy val specs2Scalaz = Seq(
   "org.specs2" %% "specs2-scalaz" % specs2Version % "test")
-
-lazy val fs2Jvm = Seq(
-  "co.fs2" %% "fs2-core" % fs2Version)
-
-lazy val fs2Js = Seq(
-  "co.fs2" %%%! "fs2-core" % fs2Version)
 
 lazy val specs2 = Seq(
     "org.specs2" %% "specs2-core"
